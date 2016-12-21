@@ -1,5 +1,4 @@
-#
- # Copyright � 2016,  Sultan Qasim Khan <sultanqasim@gmail.com> 		      
+ Copyright � 2016,  Sultan Qasim Khan <sultanqasim@gmail.com> 		      
  # Copyright � 2016,  Varun Chitre  <varun.chitre15@gmail.com>	
  #
  # Custom build script
@@ -31,15 +30,15 @@ red='\033[0;31m'
 nocol='\033[0m'
 export ARCH=arm
 export SUBARCH=arm
-export CROSS_COMPILE=/home/taco/android/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi- 
-export KBUILD_BUILD_USER="taco"
-export KBUILD_BUILD_HOST="mau"
+export CROSS_COMPILE=/home/superstar/android/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi- 
+export KBUILD_BUILD_USER="superstar"
+export KBUILD_BUILD_HOST="mobile"
 echo -e "$cyan***********************************************"
 echo "          Compiling kernel                          "   
 echo -e "**********************************************$nocol"
-rm -f /home/taco/android/kernel/lge/msm8909/arch/arm/boot/dts/*.dtb
-rm -f /home/taco/android/kernel/lge/msm8909/arch/arm/boot/dt.img
-rm -f /home/taco/android/kernel/lge/msm8909/flash_zip/boot.img
+rm -f /home/superstar/android/kernel/lge/m1/arch/arm/boot/dts/*.dtb
+rm -f /home/superstar/android/kernel/lge/m1/arch/arm/boot/dt.img
+rm -f /home/superstar/android/kernel/lge/m1/flash_zip/boot.img
 make clean && make mrproper
 echo -e " Initializing defconfig"
 make m1_mpcs_us_defconfig
@@ -47,24 +46,23 @@ echo -e " Building kernel"
 make -j8 zImage
 make -j8 dtbs
 
-/home/taco/android/kernel/lge/msm8909/tools/dtbToolCM -2 -o /home/taco/android/kernel/lge/msm8909/arch/arm/boot/dt.img -s 2048 -p /home/taco/android/kernel/lge/msm8909/scripts/dtc/ /home/taco/android/kernel/lge/msm8909/arch/arm/boot/dts/
+/home/superstar/android/kernel/lge/m1/tools/dtbToolCM -2 -o /home/superstar/android/kernel/lge/m1/arch/arm/boot/dt.img -s 2048 -p /home/superstar/android/kernel/lge/m1/scripts/dtc/ /home/superstar/android/kernel/lge/m1/arch/arm/boot/dts/
 
 make -j8 modules
 echo -e " Make flashable zip"
-rm -rf taco_install
-mkdir -p taco_install
-make -j8 modules_install INSTALL_MOD_PATH=taco_install INSTALL_MOD_STRIP=1
-mkdir -p /home/taco/android/kernel/lge/msm8909/flash_zip/system/lib/modules/pronto
-find taco_install/ -name '*.ko' -type f -exec cp '{}' /home/taco/android/kernel/lge/msm8909/flash_zip/system/lib/modules/ \;
-mv /home/taco/android/kernel/lge/msm8909/flash_zip/system/lib/modules/wlan.ko /home/taco/android/kernel/lge/msm8909/flash_zip/system/lib/modules/pronto/pronto_wlan.ko
-cp home/taco/android/kernel/lge/msm8909/arch/arm/boot/zImage home/taco/android/kernel/lge/msm8909/flash_zip/tools/
-cp home/taco/android/kernel/lge/msm8909/arch/arm/boot/dt.img home/taco/android/kernel/lge/msm8909/flash_zip/tools/
-rm -f /home/taco/m1_taco_kernel_rx.zip
-cd /home/taco/android/kernel/lge/msm8909/flash_zip
-zip -r /home/taco/android/kernel/lge/msm8909/arch/arm/boot/m1_kernel.zip ./
-mv /home/taco/android/kernel/lge/msm8909/arch/arm/boot/m1_kernel.zip /home/taco/m1_kernel_rx.zip
+rm -rf superstar_install
+mkdir -p superstar_install
+make -j8 modules_install INSTALL_MOD_PATH=superstar_install INSTALL_MOD_STRIP=1
+mkdir -p /home/superstar/android/kernel/lge/m1/flash_zip/system/lib/modules/pronto
+find superstar_install/ -name '*.ko' -type f -exec cp '{}' /home/superstar/android/kernel/lge/m1/flash_zip/system/lib/modules/ \;
+mv /home/superstar/android/kernel/lge/m1/flash_zip/system/lib/modules/wlan.ko /home/superstar/android/kernel/lge/m1/flash_zip/system/lib/modules/pronto/pronto_wlan.ko
+cp home/superstar/android/kernel/lge/m1/arch/arm/boot/zImage home/superstar/android/kernel/lge/m1/flash_zip/tools/
+cp home/superstar/android/kernel/lge/m1/arch/arm/boot/dt.img home/superstar/android/kernel/lge/m1/flash_zip/tools/
+rm -f /home/superstar/m1_superstar_kernel_rx.zip
+cd /home/superstar/android/kernel/lge/m1/flash_zip
+zip -r /home/superstar/android/kernel/lge/m1/arch/arm/boot/m1_kernel.zip ./
+mv /home/superstar/android/kernel/lge/m1/arch/arm/boot/m1_kernel.zip /home/superstar/m1_kernel_rx.zip
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 echo -e "$yellow Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
-
 
